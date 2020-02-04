@@ -7,6 +7,8 @@ namespace Front_End_Assesment.Responses
 {
     public class LoadProjectResp
     {
+
+        public int Id { get; set; }
         public string Title { get; set; }
         public decimal Budget { get; set; }
         public string startDate { get; set; }

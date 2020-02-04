@@ -7,12 +7,14 @@ using Front_End_Assesment.GraphQL.InputTypes;
 using Front_End_Assesment.GraphQL.Schemas;
 using Front_End_Assesment.Interfaces;
 using Front_End_Assesment.MessageHandlers;
+using Front_End_Assesment.Models;
 using Front_End_Assesment.Repositories;
 using GraphiQl;
 using GraphQL;
 using GraphQL.Http;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
+using GraphQL.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -44,9 +46,12 @@ namespace Front_End_Assesment
             services.AddScoped<ProjectMutation>();
             services.AddHttpContextAccessor();
             services.AddScoped<Iproject, ProjectRepository>();
+            services.AddScoped<ISchema, Schema>();
             services.AddScoped<IDocumentExecuter, DocumentExecuter>();
             services.AddScoped<IDocumentWriter, DocumentWriter>();
             services.AddScoped<LoginType>();
+            services.AddScoped<LoginResponseType>();
+            services.AddScoped<GenericResponseType>();
             services.AddScoped<LocationType>();
             services.AddScoped<ProjectType>();
             services.AddScoped<LoginInputType>();
@@ -54,15 +59,19 @@ namespace Front_End_Assesment
 
             services.AddSingleton<JWTAuthHandler>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            services.AddScoped<ProjectShema>();
+            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
+           services.AddScoped<ProjectShema>();
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
                 builder.AllowAnyOrigin()
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
-
+            services.AddEntityFrameworkSqlite().AddDbContext<ProjectContext>();
+            using (var client = new ProjectContext())
+            {
+                client.Database.EnsureCreated();
+            }
             services.AddGraphQL(o => { o.ExposeExceptions = false; })
                .AddGraphTypes(ServiceLifetime.Scoped);
             services.Configure<KestrelServerOptions>(options =>
@@ -95,7 +104,7 @@ namespace Front_End_Assesment
             //    endpoints.MapControllers();
             //});
             
-            app.UseGraphiQl("/v1/auth");
+            app.UseGraphiQl("/graphql");
             app.UseGraphQL<ProjectShema>();
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
             // app.UseMvc();

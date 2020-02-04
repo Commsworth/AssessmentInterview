@@ -11,17 +11,13 @@ namespace Front_End_Assesment.GraphQL.Schemas
 {
     public class ProjectShema : Schema
     {
-        public ProjectShema(IDependencyResolver resolve) : base((IServiceProvider) resolve)
+        public ProjectShema(IDependencyResolver resolve) : base(resolve)
         {
             Query = (ProjectQuery)resolve.Resolve(typeof(ProjectQuery));
             Mutation = (ProjectMutation)resolve.Resolve(typeof(ProjectMutation));
         }
 
-        public interface IDependencyResolver
-        {
-            T Resolve<T>();
-            object Resolve(Type type);
-        }
+       
     }
 
 }

@@ -51,16 +51,16 @@ namespace Front_End_Assesment.Repositories
             try
             {
                 var locations = new List<Location>();
-                locations.Add(new Payload.Location { latitude = (decimal)5.532003041, longitude = (decimal)7.486002487, location = "Abia"});
-                locations.Add(new Payload.Location { latitude = (decimal)6.443261653, longitude = (decimal)3.391531071, location = "Lagos"});
-                locations.Add(new Payload.Location { latitude = (decimal)7.629959329, longitude = (decimal)4.179992634, location = "Osun"});
-                locations.Add(new Payload.Location { latitude = (decimal)9.083333149, longitude = (decimal)7.533328002, location = "Abuja"});
-                locations.Add(new Payload.Location { latitude = (decimal)11.68040977, longitude = (decimal)10.19001339, location = "Bauchi"});
-                locations.Add(new Payload.Location { latitude = (decimal)7.250395934, longitude = (decimal)5.199982054, location = "Ondo"});
-                locations.Add(new Payload.Location { latitude = (decimal)6.340477314, longitude = (decimal)5.620008096, location = "Edo"});
-                locations.Add(new Payload.Location { latitude = (decimal)4.960406513, longitude = (decimal)8.330023558, location = "Crossriver"});
-                locations.Add(new Payload.Location { latitude = (decimal)6.867034321, longitude = (decimal)7.383362995, location = "Enugu"});
-                locations.Add(new Payload.Location { latitude = (decimal)11.99997683, longitude = (decimal)8.5200378,   location = "Kano"});
+                locations.Add(new Payload.Location { latitude = "5.532003041", longitude = "7.486002487", location = "Abia"});
+                locations.Add(new Payload.Location { latitude = "6.443261653", longitude = "3.391531071", location = "Lagos"});
+                locations.Add(new Payload.Location { latitude = "7.629959329", longitude = "4.179992634", location = "Osun"});
+                locations.Add(new Payload.Location { latitude = "9.083333149", longitude = "7.533328002", location = "Abuja"});
+                locations.Add(new Payload.Location { latitude = "11.68040977", longitude = "10.19001339", location = "Bauchi"});
+                locations.Add(new Payload.Location { latitude = "7.250395934", longitude = "5.199982054", location = "Ondo"});
+                locations.Add(new Payload.Location { latitude = "6.340477314", longitude = "5.620008096", location = "Edo"});
+                locations.Add(new Payload.Location { latitude = "4.960406513", longitude = "8.330023558", location = "Crossriver"});
+                locations.Add(new Payload.Location { latitude = "6.867034321", longitude = "7.383362995", location = "Enugu"});
+                locations.Add(new Payload.Location { latitude = "11.99997683", longitude = "8.5200378",   location = "Kano"});
                 return locations;
             }
             catch(Exception ex)
@@ -73,8 +73,9 @@ namespace Front_End_Assesment.Repositories
         {
             try
             {
-                var project = new Project { Budget = projectInfo.Budget, contractorAddress = projectInfo.contractorAddress, contractorName = projectInfo.contractorName, Title = projectInfo.Title, endDate = projectInfo.endDate, startDate = projectInfo.startDate };
+                var project = new Project { Budget = projectInfo.budget, contractorAddress = projectInfo.contractorAddress, contractorName = projectInfo.contractorName, Title = projectInfo.title, endDate = projectInfo.endDate, startDate = projectInfo.startDate };
                 _context.Project.Add(project);
+                _context.SaveChanges();
                 return new genericResp { message = "Project Created" , status = true };
             }
             catch(Exception Ex)
@@ -87,7 +88,7 @@ namespace Front_End_Assesment.Repositories
         {
             using (var db = _context)
             {
-                var project = _context.Project.Select(o => new LoadProjectResp { Budget = o.Budget, contractorAddress = o.contractorAddress, contractorName = o.contractorName, endDate = o.endDate, startDate = o.startDate }).ToList();
+                var project = _context.Project.Select(o => new LoadProjectResp {Id=o.Id, Budget = o.Budget, contractorAddress = o.contractorAddress, contractorName = o.contractorName, endDate = o.endDate, startDate = o.startDate,Title=o.Title }).ToList();
                 return project;
             }
         }

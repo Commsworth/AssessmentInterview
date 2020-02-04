@@ -17,8 +17,8 @@ namespace Front_End_Assesment.GraphQL.Schemas
             Name = "ProjectQuery";
 
             #region Project
-            Field<ProjectType>(
-                "loadproject",
+            Field<ListGraphType<LoadProjectType>>(
+                "LoadProject",
                 Description = "Load all Project",
 
                 resolve: context => project.LoadProject()
@@ -26,8 +26,8 @@ namespace Front_End_Assesment.GraphQL.Schemas
             #endregion
 
             #region Location
-            Field<LocationType>(
-                "LocationType",
+            Field<ListGraphType<LocationType>>(
+                "LoadLocations",
                 Description = "Load all location to maps",
 
                 resolve: context => project.LoadLocation()

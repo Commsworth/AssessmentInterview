@@ -17,11 +17,11 @@ namespace Front_End_Assesment.GraphQL.Schemas
             Name = "ProjectMutation";
 
             #region Login user
-            Field<LoginType>(
+            Field<LoginResponseType>(
                "LoginUser",
                Description = "This mutation is for authenticating user Login details email: hello@commsworth.com and password : Hello",
                arguments: new QueryArguments(
-                   new QueryArgument<NonNullGraphType<LoginType>> { Name = "appuser" }
+                   new QueryArgument<NonNullGraphType<LoginType>> { Name = "user" }
                ),
                resolve: context =>
                {
@@ -31,15 +31,15 @@ namespace Front_End_Assesment.GraphQL.Schemas
             #endregion
 
             #region Create project
-            Field<ProjectType>(
-                "Create project",
+            Field<GenericResponseType>(
+                "CreateProject",
                 Description = "create a a new project for the program",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<ProjectType>> { Name = "project" }
                     ),
                 resolve: context =>
                {
-                   var projects = context.GetArgument<CreateProjectPayload>(Name = "createproject");
+                   var projects = context.GetArgument<CreateProjectPayload>(Name = "project");
                    return project.CreateProject(projects);
                });
             #endregion
