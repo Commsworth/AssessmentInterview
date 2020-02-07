@@ -5,6 +5,7 @@ using Front_End_Assesment.Payload;
 using Front_End_Assesment.Responses;
 using GraphQL;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -20,11 +21,12 @@ namespace Front_End_Assesment.Repositories
         private IHttpContextAccessor _httpContext;
         private string token;
 
-        public ProjectRepository(IConfiguration _config, ProjectContext context, IHttpContextAccessor httpContext)
+        public ProjectRepository( ProjectContext context, IConfiguration _config, IHttpContextAccessor httpContext)
         {
             this.config = _config;
             _context = context;
             _httpContext = httpContext;
+            token = this._httpContext.HttpContext.Request.Headers.Where(o => o.Key == "Authorization").FirstOrDefault().Value.ToString();
         }
         
         public loginResp UserLogin(loginPayload loginDetails)
