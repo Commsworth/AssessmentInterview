@@ -3,6 +3,7 @@ using Front_End_Assesment.Message_Handlers;
 using Front_End_Assesment.Models;
 using Front_End_Assesment.Payload;
 using Front_End_Assesment.Responses;
+using GraphQL;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -48,6 +49,9 @@ namespace Front_End_Assesment.Repositories
 
         public List<Location> LoadLocation()
         {
+            if (token == null || token == "") throw new ExecutionError("No token provided");
+            var dtoken = new TokenManager(config).ValidateToken(token);
+            if (dtoken == null) throw new ExecutionError("Invalid or Expired Token");
             try
             {
                 var locations = new List<Location>();
@@ -71,6 +75,9 @@ namespace Front_End_Assesment.Repositories
 
         public genericResp CreateProject(CreateProjectPayload projectInfo)
         {
+            if (token == null || token == "") throw new ExecutionError("No token provided");
+            var dtoken = new TokenManager(config).ValidateToken(token);
+            if (dtoken == null) throw new ExecutionError("Invalid or Expired Token");
             try
             {
                 var project = new Project { Budget = projectInfo.budget, contractorAddress = projectInfo.contractorAddress, contractorName = projectInfo.contractorName, Title = projectInfo.title, endDate = projectInfo.endDate, startDate = projectInfo.startDate };
@@ -86,6 +93,9 @@ namespace Front_End_Assesment.Repositories
 
         public IEnumerable<LoadProjectResp> LoadProject()
         {
+            if (token == null || token == "") throw new ExecutionError("No token provided");
+            var dtoken = new TokenManager(config).ValidateToken(token);
+            if (dtoken == null) throw new ExecutionError("Invalid or Expired Token");
             using (var db = _context)
             {
                 var project = _context.Project.Select(o => new LoadProjectResp {Id=o.Id, Budget = o.Budget, contractorAddress = o.contractorAddress, contractorName = o.contractorName, endDate = o.endDate, startDate = o.startDate,Title=o.Title }).ToList();
